@@ -1,0 +1,61 @@
+:root {
+    --font-small: 1.4rem;
+    --font-medium: 1.6rem;
+    --font-large: 2rem;
+
+    --color-primary: #000000;
+    --color-secondary: #666666;
+    --color-tertiary: #cccccc;
+
+    --color-white: #ffffff;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%; /* This helps reset the browser's font size incase the user has a preset value */
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.side-bar {
+    width: 20rem;
+    height: 100vh;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 3rem 2rem;
+}
+
+.side-bar__list {
+    border: 2px solid var(--color-secondary);
+    border-radius: 5px;
+    padding: 2rem 1rem;
+    
+    height: 80%;
+}
+
+.side-bar__item {
+    font-size: var(--font-medium);
+    text-align: center;
+}
+
+.side-bar__button {
+    font-size: inherit;
+    color: inherit;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    padding-bottom: .7rem;
+    border-bottom: 3px solid var(--color-tertiary);
+}
