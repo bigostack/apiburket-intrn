@@ -30,11 +30,31 @@ a {
 }
 
 .side-bar {
-    width: 20rem;
+    width: 30rem;
     height: 100vh;
     background-color: var(--color-primary);
     color: var(--color-white);
     padding: 3rem 2rem;
+}
+
+.filter {
+    display: flex;
+    margin-bottom: 3rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter__box {
+    height: 3rem;
+    padding: 1rem 2rem;
+    border: 2px solid var(--color-secondary);
+    background-color: var(--color-tertiary);
+
+    border-radius: 5px;
+}
+
+.filter__box::-webkit-search-cancel-button {
+    display: none;
 }
 
 .side-bar__list {
