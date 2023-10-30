@@ -1,3 +1,6 @@
+const sideBarList = document.querySelector(".side-bar__list");
+const sideBarCategory = document.querySelector(".side-bar__item");
+
 async function getCategory() {
     // TODO: Fetch data from api website and store as json
     apiList = await fetch("https://api.publicapis.org/entries");
@@ -16,9 +19,12 @@ async function getCategory() {
 
     /* 
     *   create new array
-    *   check value of last value in new array if it is the same as the value of the current value of old array
+    *   compare value of next item in categoryList if it's the same as the current value
     *   if true, skip to the next (continue)
     *   else, push value to new array
+    * 
+    ?   This helps strip off repetition of category names from the list, from which the categories names in the side-bar
+    ?   would be updated.
     */
     
     compressedList = [];
@@ -33,8 +39,26 @@ async function getCategory() {
     
     console.log(compressedList);
 
+
+    compressedList.forEach(item => {
+        categoryName = document.createElement("li");
+        categoryName.className = "side-bar__item";
+
+        categoryBtn = document.createElement("button");
+        categoryBtn.className = "side-bar__button";
+        categoryBtn.textContent = item;
+
+        categoryName.appendChild(categoryBtn);
+        sideBarList.appendChild(categoryName);
+    })
+
+
     return compressedList;
 }
 
 getCategory();
 
+
+// TODO: Handle the filter event
+
+// TODO: Handle the click event
