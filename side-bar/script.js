@@ -1,64 +1,123 @@
 const sideBarList = document.querySelector(".side-bar__list");
 const sideBarCategory = document.querySelector(".side-bar__item");
 
-async function getCategory() {
-    // TODO: Fetch data from api website and store as json
-    apiList = await fetch("https://api.publicapis.org/entries");
-    apiJSON = await apiList.json();
 
-    // * Category list holds all the values of the the key="Category" in an array
-    // * so that the value data can be accessed uniquely and can be made available outside the function block
-    categoryList = [];
-    console.log(apiJSON);
-    apiJSON.entries.forEach(list => {
-        categoryList.push(list.Category);
-    });
-
-    categoryList.sort(); //Just incase the list is not well sorted
-    //! console.log(categoryList);
-
-    /* 
-    *   create new array
-    *   compare value of next item in categoryList if it's the same as the current value
-    *   if true, skip to the next (continue)
-    *   else, push value to new array
-    * 
-    ?   This helps strip off repetition of category names from the list, from which the categories names in the side-bar
-    ?   would be updated.
-    */
+function updateSideBar(list) {
     
-    compressedList = [];
+    sideBarList.replaceChildren()
     
-    for (let i = 0; i < categoryList.length; i++) {
-        
-        if (categoryList[i] === categoryList[i+1]) {
-            continue;
-        }
-        compressedList.push(categoryList[i]);
-    }
-    
-    console.log(compressedList);
-
-
-    compressedList.forEach(item => {
+    list.forEach(item => {
         categoryName = document.createElement("li");
         categoryName.className = "side-bar__item";
-
+        
         categoryBtn = document.createElement("button");
         categoryBtn.className = "side-bar__button";
         categoryBtn.textContent = item;
-
+        
         categoryName.appendChild(categoryBtn);
         sideBarList.appendChild(categoryName);
+
     })
-
-
-    return compressedList;
+    
+    if (sideBarList.childElementCount === 0) {
+        defaultChild = document.createElement("li");
+        defaultChild.className = "side-bar__default-text";
+        defaultChild.textContent = "Cannot be found";
+        sideBarList.appendChild(defaultChild);
+    }
 }
 
-getCategory();
+function filterSearch(text, list) {
+    console.log(text);
+    return list.filter((item) => item.toLowerCase().includes(text));
+}
 
 
-// TODO: Handle the filter event
+async function sideBar() {
 
-// TODO: Handle the click event
+    const getCategory = async function () {
+        // TODO: Fetch data from api website and store as json
+        apiList = await fetch("https://api.publicapis.org/entries");
+        apiJSON = await apiList.json();
+    
+        // * Category list holds all the values of the the key="Category" in an array...
+        // * ... so that the value data can be accessed uniquely and can be made available outside the function block
+        const categoryList = [];
+
+        apiJSON.entries.forEach(list => {
+            categoryList.push(list.Category);
+        });
+        
+        categoryList.sort(); //? Just incase the list is not well sorted
+        
+        /* 
+        *   create new array
+        *   compare value of next item in categoryList if it's the same as the current value
+        *   if true, skip to the next (continue)
+        *   else, push value to new array
+        * 
+        ?   This helps strip off repetition of category names from the list, from which the categories names in the side-bar
+        ?   would be updated.
+        */        
+        compressedList = [];
+        
+        for (let i = 0; i < categoryList.length; i++) {
+            
+            if (categoryList[i] === categoryList[i+1]) {
+                continue;
+            }
+            compressedList.push(categoryList[i]);
+        }
+
+        
+        
+        updateSideBar(compressedList);
+        
+        return compressedList;
+    }
+    
+    category = getCategory();
+
+    
+    
+    // TODO: Handle the filter event
+    // * Get input from search bar and convert to lowerCase
+    const filterBox = document.querySelector(".filter__box");
+    const filterBtn = document.querySelector(".filter__btn");
+
+    category
+        .then(
+
+            filterBox.onkeydown = (e) => {
+
+                if (e.code === "Enter") {
+                    const filterText = filterBox.value.toLowerCase();
+                
+                // * Compare with the list
+                updatedList = filterSearch(filterText, compressedList);
+                
+                // * Update side-bar list to show only categories that match the comparison
+                updateSideBar(updatedList);
+                }
+
+            },
+
+            filterBtn.onclick = () => {
+                
+                const filterText = filterBox.value.toLowerCase();
+                
+                // * Compare with the list
+                updatedList = filterSearch(filterText, compressedList);
+                
+                // * Update side-bar list to show only categories that match the comparison
+                updateSideBar(updatedList);
+            }
+
+        )
+    
+    
+    
+    
+    // TODO: Handle the click event
+}
+sideBar()

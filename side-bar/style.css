@@ -73,6 +73,12 @@ a {
     margin-bottom: 2rem;
 }
 
+.side-bar__default-text {
+    font-size: var(--font-medium);
+    font-style: italic;
+    text-align: center;
+}
+
 .side-bar__button {
     font-size: inherit;
     color: inherit;
