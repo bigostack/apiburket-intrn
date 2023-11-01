@@ -70,7 +70,7 @@ async function sideBar() {
         }
 
         
-        
+
         updateSideBar(compressedList);
         
         return compressedList;
@@ -88,30 +88,36 @@ async function sideBar() {
     category
         .then(
 
-            filterBox.onkeydown = (e) => {
+            // ? This is a better way for filtering the category list. User might not know the exact 
+            // ? ... keywords to search but with an updating list by every key pressed, they get a better...
+            // ? ... chance at finding what they want before completing the entire keyword.
+            filterBox.onkeyup = () => {
 
-                if (e.code === "Enter") {
-                    const filterText = filterBox.value.toLowerCase();
-                
-                // * Compare with the list
-                updatedList = filterSearch(filterText, compressedList);
-                
-                // * Update side-bar list to show only categories that match the comparison
-                updateSideBar(updatedList);
-                }
-
-            },
-
-            filterBtn.onclick = () => {
-                
                 const filterText = filterBox.value.toLowerCase();
                 
-                // * Compare with the list
+                // Compare with the list
                 updatedList = filterSearch(filterText, compressedList);
                 
-                // * Update side-bar list to show only categories that match the comparison
+                // Update side-bar list to show only categories that match the comparison
                 updateSideBar(updatedList);
+
             }
+
+            //! This is for the filter button. In this case the filter is triggered only once the button is clicked.
+            //! ... This is not the best model as not everyone know the entire keyword to search but might come in handy
+            //! ... when trying to minimize data consumption (I presume), as the list updates only once and not every 
+            //! ... single time a key is pressed.
+
+            // filterBtn.onclick = () => {
+                
+            //     const filterText = filterBox.value.toLowerCase();
+                
+            //     // Compare with the list
+            //     updatedList = filterSearch(filterText, compressedList);
+                
+            //     // Update side-bar list to show only categories that match the comparison
+            //     updateSideBar(updatedList);
+            // }
 
         )
     
