@@ -4,7 +4,7 @@ const searchBar = document.querySelector(".search-bar");
 const searchBtn = document.querySelector(".search-btn");
 
 async function getData() {
-  const response = await fetch("https://api.publicapis.org/entries");
+  const response = await fetch();
   if (!response.ok) {
     throw new Error(`HTTP Error: ${response.status}`);
   }
@@ -17,7 +17,7 @@ async function getData() {
     detail: data.entries,
   });
 
-  //* Fires the customEvent on clicking the search button
+  //* Fires the customEvent(build) on clicking the search button
 
   searchBtn.addEventListener("click", (e) => {
     searchBar.dispatchEvent(dataInputEvent);
@@ -52,33 +52,17 @@ searchBar.addEventListener("build", (e) => {
         resultsList.push(elem);
     });
   }
-
-  displayAPIs(resultsList);
   console.log(resultsList);
 
   //? To display the items, create a function that will go through the each items in the array(resultsList) and use the values insides it to diplay the content needed -> displayAPIs(arr).
 });
 
-function displayAPIs(results) {
-  let html = "";
-  for (let i = 0; i < results.length; i++) {
-    html =
-      html +
-      `
-    <div class="api-card">
-    <h1 class="api-name">${results[i].API}</h1>
-    <p class="api-category">${results[i].Category}</p>
-    <a href="${results[i].Link}" class="api-link">click here</a>
-  </div>
-    `;
-    document.querySelector(".page").innerHTML = html;
-  }
-}
-
 //PAGINATION FUNCTIONALITY
 
 function pagination() {
-  const itemList = document.querySelectorAll(".api-card");
+  //? TO SELECT ALL THE ITEMS TO DISPLAY -> so add your selector
+  const itemList = document.querySelectorAll("");
+
   const previousPageBtn = document.querySelector(".btn--left");
   const nextPageBtn = document.querySelector(".btn--right");
   const paginationNumber = document.querySelector(".pagination-number");
@@ -100,8 +84,8 @@ function pagination() {
         `
       <button class = "pagination-page" page-index = ${i} >${i}</button>
       `;
-      paginationNumber.innerHTML = html;
     }
+    paginationNumber.innerHTML = html;
   };
 
   //* this will handle the numbers if items to display in each page and the ones to hide, and also the active state and the page buttom status
@@ -165,6 +149,7 @@ function pagination() {
   displayPageNumber();
   displayCurrentPage(1);
 
+  //* Sets the page to display on clicking  page navigation buttons
   previousPageBtn.addEventListener("click", () => {
     displayCurrentPage(currentPage - 1);
   });
@@ -172,6 +157,8 @@ function pagination() {
   nextPageBtn.addEventListener("click", () => {
     displayCurrentPage(currentPage + 1);
   });
+
+  //* Sets the page to display on clicking the pages button
 
   document.querySelectorAll(".pagination-page").forEach((button) => {
     const pageIndex = Number(button.getAttribute("page-index"));
