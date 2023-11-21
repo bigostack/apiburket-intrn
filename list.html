@@ -120,183 +120,40 @@
     </style>
   </head>
   <body>
-    <div class="list-container">
-      <!--  -->
-      <!-- <div class="list-item">
-        <p class="category">Category</p>
-        <h1 class="title">API Name</h1>
-        <p class="description">Description</p>
-
-        <div class="attributes">
-          <p class="attribute https">
-            <span class="icon"
-              ><img src="icons/lock-closed.svg" alt="HTTPS"
-            /></span>
-            <span class="name">Https</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute cors">
-            <span class="icon"
-              ><img src="icons/globe-alt.svg" alt="CORS"
-            /></span>
-            <span class="name">Cors</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute auth">
-            <span class="icon"><img src="icons/key.svg" alt="AUTH" /></span>
-            <span class="name">Auth</span>
-            <span class="value">Value</span>
-          </p>
-        </div>
-
-        <a href="#" class="button">
-          Explore
-          <span class="icon"
-            ><img src="icons/arrow-top-right-on-square.svg" alt="AUTH"
-          /></span>
-        </a>
-      </div>
-
-      <div class="list-item">
-        <p class="category">Category</p>
-        <h1 class="title">API Name</h1>
-        <p class="description">Description</p>
-
-        <div class="attributes">
-          <p class="attribute https">
-            <span class="icon"
-              ><img src="icons/lock-closed.svg" alt="HTTPS"
-            /></span>
-            <span class="name">Https</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute cors">
-            <span class="icon"
-              ><img src="icons/globe-alt.svg" alt="CORS"
-            /></span>
-            <span class="name">Cors</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute auth">
-            <span class="icon"><img src="icons/key.svg" alt="AUTH" /></span>
-            <span class="name">Auth</span>
-            <span class="value">Value</span>
-          </p>
-        </div>
-
-        <a href="#" class="button">
-          Explore
-          <span class="icon"
-            ><img src="icons/arrow-top-right-on-square.svg" alt="AUTH"
-          /></span>
-        </a>
-      </div>
-
-      <div class="list-item">
-        <p class="category">Category</p>
-        <h1 class="title">API Name</h1>
-        <p class="description">Description</p>
-
-        <div class="attributes">
-          <p class="attribute https">
-            <span class="icon"
-              ><img src="icons/lock-closed.svg" alt="HTTPS"
-            /></span>
-            <span class="name">Https</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute cors">
-            <span class="icon"
-              ><img src="icons/globe-alt.svg" alt="CORS"
-            /></span>
-            <span class="name">Cors</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute auth">
-            <span class="icon"><img src="icons/key.svg" alt="AUTH" /></span>
-            <span class="name">Auth</span>
-            <span class="value">Value</span>
-          </p>
-        </div>
-
-        <a href="#" class="button">
-          Explore
-          <span class="icon"
-            ><img src="icons/arrow-top-right-on-square.svg" alt="AUTH"
-          /></span>
-        </a>
-      </div>
-
-      <div class="list-item">
-        <p class="category">Category</p>
-        <h1 class="title">API Name</h1>
-        <p class="description">Description</p>
-
-        <div class="attributes">
-          <p class="attribute https">
-            <span class="icon"
-              ><img src="icons/lock-closed.svg" alt="HTTPS"
-            /></span>
-            <span class="name">Https</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute cors">
-            <span class="icon"
-              ><img src="icons/globe-alt.svg" alt="CORS"
-            /></span>
-            <span class="name">Cors</span>
-            <span class="value">Value</span>
-          </p>
-
-          <p class="attribute auth">
-            <span class="icon"><img src="icons/key.svg" alt="AUTH" /></span>
-            <span class="name">Auth</span>
-            <span class="value">Value</span>
-          </p>
-        </div>
-
-        <a href="#" class="button">
-          Explore
-          <span class="icon"
-            ><img src="icons/arrow-top-right-on-square.svg" alt="AUTH"
-          /></span>
-        </a>
-      </div> -->
-      <!--  -->
-    </div>
+    <div class="list-container"></div>
 
     <script type="module">
+      // DUMMY DATA
       import data from "./data.js";
-
-      const entries = data.entries;
-      console.log("entries", entries);
 
       const listContainer = document.querySelector(".list-container");
 
-      entries.map((entry, index) => {
-        // console.log(entry, index);
+      // ACCEPTS THE DATA TO BE RENDERED
+      function render(data) {
+        // TO ACCESS THE ENTRIES IN THE DATA
+        const entries = data.entries;
 
-        // EVALUATE THE ATTRIBUTES BG COLOR THRU ITS VALUE
-        const httpsValueBg = entry.HTTPS ? "#15803d" : "#dc2626";
+        // CLEARS THE LIST CONTAINER
+        listContainer.innerHTML = ``;
 
-        const corsValueBg =
-          entry.Cors === "yes"
-            ? "#15803d"
-            : entry.Cors === "no"
-            ? "#dc2626"
-            : "#737373";
+        // MAP OVER ENTRIES IN DATA OBJECT
+        entries.map((entry, index) => {
+          // console.log(entry, index);
 
-        const authValueBg = entry.Auth === "" ? "#dc2626" : "#15803d";
+          // EVALUATE THE ATTRIBUTES BG COLOR THRU ITS VALUE
+          const httpsValueBg = entry.HTTPS ? "#15803d" : "#dc2626";
 
-        // LIST RENDER TEMPLATE
-        const listItem = `<div class="list-item" index=${index}>
+          const corsValueBg =
+            entry.Cors === "yes"
+              ? "#15803d"
+              : entry.Cors === "no"
+              ? "#dc2626"
+              : "#737373";
+
+          const authValueBg = entry.Auth === "" ? "#dc2626" : "#15803d";
+
+          // LIST RENDER TEMPLATE
+          const listItem = `<div class="list-item" index=${index}>
         <p class="category">${entry.Category}</p>
         <h1 class="title">${entry.API}</h1>
         <p class="description">${entry.Description}</p>
@@ -308,8 +165,8 @@
             /></span>
             <span class="name">Https</span>
             <span class="value" style="background-color: ${httpsValueBg};">${
-          entry.HTTPS === true ? "yes" : "no"
-        }</span>
+            entry.HTTPS === true ? "yes" : "no"
+          }</span>
           </p>
 
           <p class="attribute cors">
@@ -318,16 +175,16 @@
             /></span>
             <span class="name">Cors</span>
             <span class="value" style="background-color: ${corsValueBg};">${
-          entry.Cors
-        }</span>
+            entry.Cors
+          }</span>
           </p>
 
           <p class="attribute auth">
             <span class="icon"><img src="icons/key.svg" alt="AUTH" /></span>
             <span class="name">Auth</span>
             <span class="value" style="background-color: ${authValueBg};">${
-          entry.Auth === "" ? "None" : entry.Auth
-        }</span>
+            entry.Auth === "" ? "None" : entry.Auth
+          }</span>
           </p>
         </div>
 
@@ -339,9 +196,13 @@
         </a>
       </div>`;
 
-        // APPEND TO LIST CONTAINER
-        listContainer.insertAdjacentHTML("beforeend", listItem);
-      });
+          // APPEND TO LIST CONTAINER
+          listContainer.insertAdjacentHTML("beforeend", listItem);
+        });
+      }
+
+      // WAITING FOR THE ALERT, TO TRIGGER THE RENDERING/RE-RENDERING
+      render(data);
     </script>
   </body>
 </html>
