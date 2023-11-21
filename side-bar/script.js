@@ -1,5 +1,6 @@
 const sideBarList = document.querySelector(".side-bar__list");
 const sideBarCategory = document.querySelector(".side-bar__item");
+const sideBarButtonNodeList = document.querySelectorAll(".side-bar__button");
 
 
 function updateSideBar(list) {
@@ -9,13 +10,13 @@ function updateSideBar(list) {
     list.forEach(item => {
         categoryName = document.createElement("li");
         categoryName.className = "side-bar__item";
+        categoryName.textContent = item;
         
         categoryBtn = document.createElement("button");
         categoryBtn.className = "side-bar__button";
-        categoryBtn.textContent = item;
         
-        categoryName.appendChild(categoryBtn);
-        sideBarList.appendChild(categoryName);
+        categoryBtn.appendChild(categoryName);
+        sideBarList.appendChild(categoryBtn);
 
     })
     
@@ -36,12 +37,14 @@ function filterSearch(text, list) {
 async function sideBar() {
 
     const getCategory = async function () {
-        // TODO: Fetch data from api website and store as json
+        // * Fetch data from api website and store as json
+
         apiList = await fetch("https://api.publicapis.org/entries");
         apiJSON = await apiList.json();
     
-        // * Category list holds all the values of the the key="Category" in an array...
-        // * ... so that the value data can be accessed uniquely and can be made available outside the function block
+        
+        // ? Category list holds all the values of the the key="Category" in an array...
+        // ? ... so that the value data can be accessed uniquely and can be made available outside the function block
         const categoryList = [];
 
         apiJSON.entries.forEach(list => {
@@ -50,12 +53,7 @@ async function sideBar() {
         
         categoryList.sort(); //? Just incase the list is not well sorted
         
-        /* 
-        *   create new array
-        *   compare value of next item in categoryList if it's the same as the current value
-        *   if true, skip to the next (continue)
-        *   else, push value to new array
-        * 
+        /*  
         ?   This helps strip off repetition of category names from the list, from which the categories names in the side-bar
         ?   would be updated.
         */        
@@ -80,10 +78,8 @@ async function sideBar() {
 
     
     
-    // TODO: Handle the filter event
-    // * Get input from search bar and convert to lowerCase
+    // * FILTERING THROUGH THE SIDE-BAR
     const filterBox = document.querySelector(".filter__box");
-    const filterBtn = document.querySelector(".filter__btn");
 
     category
         .then(
@@ -103,27 +99,28 @@ async function sideBar() {
 
             }
 
-            //! This is for the filter button. In this case the filter is triggered only once the button is clicked.
-            //! ... This is not the best model as not everyone know the entire keyword to search but might come in handy
-            //! ... when trying to minimize data consumption (I presume), as the list updates only once and not every 
-            //! ... single time a key is pressed.
-
-            // filterBtn.onclick = () => {
-                
-            //     const filterText = filterBox.value.toLowerCase();
-                
-            //     // Compare with the list
-            //     updatedList = filterSearch(filterText, compressedList);
-                
-            //     // Update side-bar list to show only categories that match the comparison
-            //     updateSideBar(updatedList);
-            // }
-
         )
     
     
     
-    
-    // TODO: Handle the click event
 }
-sideBar()
+sideBar();
+
+
+
+// ? We need a way to communicate the click event on the side-bar to other components interested in using the information
+// ? Hence, a custom event is created so as to have a unique event that interested components can listen to
+
+sideBarButtonNodeList.forEach(btn => {
+    btn.onclick = function () {
+
+        this.dispatchEvent (
+            new CustomEvent("sideBarClick", {
+                bubbles: true,
+            })
+        );
+    }
+
+    // ? This is how to test and use the custom event to get the value of the textContent or any other value you want to get
+    // ! btn.addEventListener("sideBarClick", (e) => {console.log(e.target.textContent)})
+});
