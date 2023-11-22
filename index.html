@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Search Bar</title>
+  </head>
+  <body>
+    <form action="#">
+      <div class="search-bar__box">
+        <input
+          type="search"
+          class="search-bar"
+          size="60"
+          placeholder="search for APIs.."
+        />
+        <button class="search-btn">Search</button>
+      </div>
+    </form>
+
+    <!-- Pagination markup -->
+    <div class="pagination-box">
+      <div class="pagination">
+        <button class="btn btn--left" title="previous page"><</button>
+
+        <div class="pagination-number">
+          <!-- The pages number goes in here -->
+        </div>
+
+        <button class="btn btn--right" title="Next page">></button>
+      </div>
+    </div>
+
+    <script src="search.js"></script>
+  </body>
+</html>

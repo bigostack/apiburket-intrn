@@ -1,0 +1,73 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 1.6rem;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+/* Search Bar Stylings  */
+
+.search-bar__box {
+  width: 90rem;
+  margin: 2rem auto;
+}
+
+.search-bar {
+  padding: 0.5rem 0.8rem;
+}
+
+.search-btn {
+  background-color: #555;
+  color: #fff;
+  padding: 0.6rem;
+  cursor: pointer;
+  border: none;
+}
+
+/* Pagination styling  */
+
+.pagination {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-number {
+  display: flex;
+  gap: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.btn,
+.pagination-page {
+  background: none;
+  padding: 0.5rem 0.8rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:not(.disabled):hover {
+  background-color: #555;
+  color: #fff;
+}
+
+.pagination-page:hover {
+  background-color: #555;
+  color: #fff;
+}
+
+.pagination-page.active {
+  background-color: #000;
+  color: #fff;
+}
