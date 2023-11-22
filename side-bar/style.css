@@ -1,0 +1,90 @@
+:root {
+    --font-small: 1.4rem;
+    --font-medium: 1.6rem;
+    --font-large: 2rem;
+
+    --color-primary: #000000;
+    --color-secondary: #666666;
+    --color-tertiary: #cccccc;
+
+    --color-white: #ffffff;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%; /* This helps reset the browser's font size incase the user has a preset value */
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.side-bar {
+    width: 30rem;
+    height: 100vh;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 3rem 2rem;
+    overflow-y: scroll;
+}
+
+.filter {
+    display: flex;
+    margin-bottom: 3rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter__box {
+    height: 3rem;
+    padding: 1rem 2rem;
+    border: 2px solid var(--color-secondary);
+    background-color: var(--color-tertiary);
+
+    border-radius: 5px;
+}
+
+.filter__box::-webkit-search-cancel-button {
+    display: none;
+}
+
+.side-bar__list {
+    border: 2px solid var(--color-secondary);
+    border-radius: 5px;
+    padding: 1.5rem;
+}
+
+.side-bar__item {
+    font-size: var(--font-medium);
+    text-align: center;
+}
+
+.side-bar__button:not(:last-of-type) {
+    border-bottom: 1px solid var(--color-secondary);
+}
+
+.side-bar__default-text {
+    font-size: var(--font-medium);
+    font-style: italic;
+    text-align: center;
+}
+
+.side-bar__button {
+    padding: 1rem 3rem;
+    font-size: inherit;
+    color: inherit;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    width: 100%;
+}
