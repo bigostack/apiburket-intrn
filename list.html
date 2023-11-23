@@ -128,13 +128,10 @@
 
       const listContainer = document.querySelector(".list-container");
 
-      // ACCEPTS THE DATA TO BE RENDERED
-      function render(data) {
+      // RENDER FUNCTION: ACCEPTS THE DATA TO BE RENDERED
+      function render(dataObject) {
         // TO ACCESS THE ENTRIES IN THE DATA
-        const entries = data.entries;
-
-        // CLEARS THE LIST CONTAINER
-        listContainer.innerHTML = ``;
+        const entries = dataObject.entries;
 
         // MAP OVER ENTRIES IN DATA OBJECT
         entries.map((entry, index) => {
@@ -153,56 +150,161 @@
           const authValueBg = entry.Auth === "" ? "#dc2626" : "#15803d";
 
           // LIST RENDER TEMPLATE
-          const listItem = `<div class="list-item" index=${index}>
-        <p class="category">${entry.Category}</p>
-        <h1 class="title">${entry.API}</h1>
-        <p class="description">${entry.Description}</p>
+          const listItem = `
+              <div class="list-item" index=${index}>
+              <p class="category">${entry.Category}</p>
+              <h1 class="title">${entry.API}</h1>
+              <p class="description">${entry.Description}</p>
 
-        <div class="attributes">
-          <p class="attribute https">
-            <span class="icon"
-              ><img src="icons/lock-closed.svg" alt="HTTPS"
-            /></span>
-            <span class="name">Https</span>
-            <span class="value" style="background-color: ${httpsValueBg};">${
-            entry.HTTPS === true ? "yes" : "no"
-          }</span>
-          </p>
+              <div class="attributes">
+                <p class="attribute https">
+                  <span class="icon">
+                    <img src="icons/lock-closed.svg" alt="HTTPS" />
+                  </span>
+                  <span class="name">Https</span>
+                  <span class="value" style="background-color: ${httpsValueBg};">
+                    ${entry.HTTPS === true ? "yes" : "no"}
+                  </span>
+                </p>
 
-          <p class="attribute cors">
-            <span class="icon"
-              ><img src="icons/globe-alt.svg" alt="CORS"
-            /></span>
-            <span class="name">Cors</span>
-            <span class="value" style="background-color: ${corsValueBg};">${
-            entry.Cors
-          }</span>
-          </p>
+                <p class="attribute cors">
+                  <span class="icon">
+                    <img src="icons/globe-alt.svg" alt="CORS" />
+                  </span>
+                  <span class="name">Cors</span>
+                  <span class="value" style="background-color: ${corsValueBg};">
+                    ${entry.Cors}
+                  </span>
+                </p>
 
-          <p class="attribute auth">
-            <span class="icon"><img src="icons/key.svg" alt="AUTH" /></span>
-            <span class="name">Auth</span>
-            <span class="value" style="background-color: ${authValueBg};">${
-            entry.Auth === "" ? "None" : entry.Auth
-          }</span>
-          </p>
-        </div>
+                <p class="attribute auth">
+                  <span class="icon">
+                    <img src="icons/key.svg" alt="AUTH" />
+                  </span>
+                  <span class="name">Auth</span>
+                  <span class="value" style="background-color: ${authValueBg};">
+                    ${entry.Auth === "" ? "None" : entry.Auth}
+                  </span>
+                </p>
+              </div>
 
-        <a href="${entry.Link}" target="_blank" class="button">
-          Explore
-          <span class="icon"
-            ><img src="icons/arrow-top-right-on-square.svg" alt="AUTH"
-          /></span>
-        </a>
-      </div>`;
+              <a href="${entry.Link}" target="_blank" class="button">
+                Explore
+                <span class="icon">
+                  <img src="icons/arrow-top-right-on-square.svg" alt="AUTH" />
+                </span>
+              </a>
+            </div>
+          `;
 
           // APPEND TO LIST CONTAINER
           listContainer.insertAdjacentHTML("beforeend", listItem);
         });
       }
 
-      // WAITING FOR THE ALERT, TO TRIGGER THE RENDERING/RE-RENDERING
+      // RE-RENDER FUNCTION: ALSO ACCEPTS THE DATA TO BE RE-RENDERED
+      function re_render(dataObject) {
+        // CLEARS THE LIST CONTAINER
+        listContainer.innerHTML = ``;
+
+        // CALL THE RENDER FUNCTION
+        render(dataObject);
+      }
+
+      //---------------------------------------------------------------------//
+
+      let replicationStore = [];
+
+      // UPDATESTORE: UPDATE THE REPLICATION STORE
+      // AND TRIGGER AN NOTIFICATION UPDATE NOTIFICATION
+      const updateStore = (freshData) => {
+        // CREATE A COPY OF THE FRESH DATA
+        replicationStore = freshData;
+
+        const event = new CustomEvent("update", {
+          bubbles: true,
+          detail: replicationStore,
+        });
+
+        // DISPATCH THE UPDATE NOTIFICATION EVENT
+        dispatchEvent(event);
+      };
+
+      // WAITING FOR A NOTIFICATION TO RE-RENDER
+      window.addEventListener("update", (event) => {
+        console.log(event);
+
+        const updatedData = event.detail;
+
+        // CALL THE RE-RENDER WITH THE UPDATED DATA
+        re_render(updatedData);
+      });
+
+      //---------------------------------------------------------------------//
+
+      // INITIAL RENDERING
       render(data);
+
+      //---------------------------------------------------------------------//
+      // END
+
+      //
+      //
+
+      //---------------------------------------------------------------------//
+      // SIMULATION
+
+      // LOCAl DATA
+      // const localData = {
+      //   count: 1427,
+      //   entries: [
+      //     {
+      //       API: "AdoptAPet",
+      //       Description: "Resource to help get pets adopted",
+      //       Auth: "apiKey",
+      //       HTTPS: true,
+      //       Cors: "yes",
+      //       Link: "https://www.adoptapet.com/public/apis/pet_list.html",
+      //       Category: "Animals",
+      //     },
+      //     {
+      //       API: "Axolotl",
+      //       Description: "Collection of axolotl pictures and facts",
+      //       Auth: "",
+      //       HTTPS: true,
+      //       Cors: "no",
+      //       Link: "https://theaxolotlapi.netlify.app/",
+      //       Category: "Animals",
+      //     },
+      //     {
+      //       API: "Cat Facts",
+      //       Description: "Daily cat facts",
+      //       Auth: "",
+      //       HTTPS: true,
+      //       Cors: "no",
+      //       Link: "https://alexwohlbruck.github.io/cat-facts/",
+      //       Category: "Animals",
+      //     },
+      //   ],
+      // };
+
+      // render(localData);
+
+      // ADD A NEW ENTRY
+      // localData.entries.push({
+      //   API: "Another API",
+      //   Description: "Another API description",
+      //   Auth: "apiKey",
+      //   HTTPS: false,
+      //   Cors: "yes",
+      //   Link: "https://example.com",
+      //   Category: "Misc",
+      // });
+
+      // // TRIGGER AN UPDATE
+      // updateStore(localData);
+
+      //---------------------------------------------------------------------//
     </script>
   </body>
 </html>
