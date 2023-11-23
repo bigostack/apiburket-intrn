@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Feature</title>
+
+    <style>
+      html {
+        /* Makes the Default REM to be 10px */
+        font-size: 62.5%;
+      }
+
+      *,
+      *::before,
+      *::after {
+        padding: 0;
+        margin: 0;
+      }
+
+      body {
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+
+      .list-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.8rem;
+        padding: 2.4rem;
+
+        overflow: hidden;
+      }
+
+      .list-item {
+        padding: 2.4rem;
+        border-radius: 1.2rem;
+        font-size: 1.6rem;
+
+        display: flex;
+        flex-direction: column;
+
+        border: 1px solid black;
+      }
+
+      .list-item .category {
+        text-align: right;
+        margin-bottom: 1.2rem;
+      }
+
+      .list-item .title {
+        font-size: 2.8rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .list-item .description {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+      }
+
+      .attributes {
+        margin-bottom: 1.8rem;
+      }
+
+      .attribute {
+        text-transform: uppercase;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .attribute:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+
+      .attribute .icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      .attribute .name {
+        display: inline-block;
+        width: 50px;
+      }
+
+      .attribute .value {
+        padding: 4px;
+
+        border-radius: 4px;
+
+        color: white;
+        /* False */
+        background-color: #dc2626;
+        /* True */
+        background-color: #15803d;
+        /* Unknown */
+        background-color: #737373;
+      }
+
+      .button {
+        text-align: center;
+
+        text-decoration: none;
+        padding: 1.2rem 2rem;
+        border-radius: 8px;
+        color: #000;
+        font-weight: 600;
+        color: white;
+        background-color: #27272a;
+        margin-top: auto;
+
+        /* border: 1px solid black; */
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="list-container"></div>
+
+    <script type="module">
+      // DUMMY DATA
+      import data from "./data.js";
+
+      const listContainer = document.querySelector(".list-container");
+
+      // RENDER FUNCTION: ACCEPTS THE DATA TO BE RENDERED
+      function render(dataObject) {
+        // TO ACCESS THE ENTRIES IN THE DATA
+        const entries = dataObject.entries;
+
+        // MAP OVER ENTRIES IN DATA OBJECT
+        entries.map((entry, index) => {
+          // console.log(entry, index);
+
+          // EVALUATE THE ATTRIBUTES BG COLOR THRU ITS VALUE
+          const httpsValueBg = entry.HTTPS ? "#15803d" : "#dc2626";
+
+          const corsValueBg =
+            entry.Cors === "yes"
+              ? "#15803d"
+              : entry.Cors === "no"
+              ? "#dc2626"
+              : "#737373";
+
+          const authValueBg = entry.Auth === "" ? "#dc2626" : "#15803d";
+
+          // LIST RENDER TEMPLATE
+          const listItem = `
+              <div class="list-item" index=${index}>
+              <p class="category">${entry.Category}</p>
+              <h1 class="title">${entry.API}</h1>
+              <p class="description">${entry.Description}</p>
+
+              <div class="attributes">
+                <p class="attribute https">
+                  <span class="icon">
+                    <img src="icons/lock-closed.svg" alt="HTTPS" />
+                  </span>
+                  <span class="name">Https</span>
+                  <span class="value" style="background-color: ${httpsValueBg};">
+                    ${entry.HTTPS === true ? "yes" : "no"}
+                  </span>
+                </p>
+
+                <p class="attribute cors">
+                  <span class="icon">
+                    <img src="icons/globe-alt.svg" alt="CORS" />
+                  </span>
+                  <span class="name">Cors</span>
+                  <span class="value" style="background-color: ${corsValueBg};">
+                    ${entry.Cors}
+                  </span>
+                </p>
+
+                <p class="attribute auth">
+                  <span class="icon">
+                    <img src="icons/key.svg" alt="AUTH" />
+                  </span>
+                  <span class="name">Auth</span>
+                  <span class="value" style="background-color: ${authValueBg};">
+                    ${entry.Auth === "" ? "None" : entry.Auth}
+                  </span>
+                </p>
+              </div>
+
+              <a href="${entry.Link}" target="_blank" class="button">
+                Explore
+                <span class="icon">
+                  <img src="icons/arrow-top-right-on-square.svg" alt="AUTH" />
+                </span>
+              </a>
+            </div>
+          `;
+
+          // APPEND TO LIST CONTAINER
+          listContainer.insertAdjacentHTML("beforeend", listItem);
+        });
+      }
+
+      // RE-RENDER FUNCTION: ALSO ACCEPTS THE DATA TO BE RE-RENDERED
+      function re_render(dataObject) {
+        // CLEARS THE LIST CONTAINER
+        listContainer.innerHTML = ``;
+
+        // CALL THE RENDER FUNCTION
+        render(dataObject);
+      }
+
+      //---------------------------------------------------------------------//
+
+      let replicationStore = [];
+
+      // UPDATESTORE: UPDATE THE REPLICATION STORE
+      // AND TRIGGER AN NOTIFICATION UPDATE NOTIFICATION
+      const updateStore = (freshData) => {
+        // CREATE A COPY OF THE FRESH DATA
+        replicationStore = freshData;
+
+        const event = new CustomEvent("update", {
+          bubbles: true,
+          detail: replicationStore,
+        });
+
+        // DISPATCH THE UPDATE NOTIFICATION EVENT
+        dispatchEvent(event);
+      };
+
+      // WAITING FOR A NOTIFICATION TO RE-RENDER
+      window.addEventListener("update", (event) => {
+        console.log(event);
+
+        const updatedData = event.detail;
+
+        // CALL THE RE-RENDER WITH THE UPDATED DATA
+        re_render(updatedData);
+      });
+
+      //---------------------------------------------------------------------//
+
+      // INITIAL RENDERING
+      render(data);
+
+      //---------------------------------------------------------------------//
+      // END
+
+      //
+      //
+
+      //---------------------------------------------------------------------//
+      // SIMULATION
+
+      // LOCAl DATA
+      // const localData = {
+      //   count: 1427,
+      //   entries: [
+      //     {
+      //       API: "AdoptAPet",
+      //       Description: "Resource to help get pets adopted",
+      //       Auth: "apiKey",
+      //       HTTPS: true,
+      //       Cors: "yes",
+      //       Link: "https://www.adoptapet.com/public/apis/pet_list.html",
+      //       Category: "Animals",
+      //     },
+      //     {
+      //       API: "Axolotl",
+      //       Description: "Collection of axolotl pictures and facts",
+      //       Auth: "",
+      //       HTTPS: true,
+      //       Cors: "no",
+      //       Link: "https://theaxolotlapi.netlify.app/",
+      //       Category: "Animals",
+      //     },
+      //     {
+      //       API: "Cat Facts",
+      //       Description: "Daily cat facts",
+      //       Auth: "",
+      //       HTTPS: true,
+      //       Cors: "no",
+      //       Link: "https://alexwohlbruck.github.io/cat-facts/",
+      //       Category: "Animals",
+      //     },
+      //   ],
+      // };
+
+      // render(localData);
+
+      // ADD A NEW ENTRY
+      // localData.entries.push({
+      //   API: "Another API",
+      //   Description: "Another API description",
+      //   Auth: "apiKey",
+      //   HTTPS: false,
+      //   Cors: "yes",
+      //   Link: "https://example.com",
+      //   Category: "Misc",
+      // });
+
+      // // TRIGGER AN UPDATE
+      // updateStore(localData);
+
+      //---------------------------------------------------------------------//
+    </script>
+  </body>
+</html>
